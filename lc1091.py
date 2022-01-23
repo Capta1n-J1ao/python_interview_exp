@@ -1,25 +1,33 @@
 # from typing import List
+from collections import deque
 
-def check():
-    return True
 
 def shortestPathBinaryMatrix(grid):
-    n = len(grid)
-    if not grid or grid[0][0] == 1 or grid[n - 1][n - 1] == 1:
+    gLen = len(grid)
+    if not grid or grid[0][0] == 1 or grid[gLen - 1][gLen - 1] == 1:
         return -1
-    elif n <= 2:
-        return n
-    queue = [(0, 0, 1)]
-    grid[0][0] = 1
+    elif gLen <= 2:
+        return gLen
+    queue = deque()
+    queue.appendleft((0, 0))
+    # visited = [[False] * gLen for _ in range(gLen)]
+    visited = [[False for _ in range(gLen)] for _ in range(gLen)]
+    visited[0][0] = True
+    # visited = {(0, 0): True}
+    step = 1
     while queue:
-        i, j, step = queue.pop(0)
-        for dx, dy in [(-1, -1), (1, 0), (0, 1), (-1, 0), (0, -1), (1, 1), (1, -1), (-1, 1)]:
-            if i + dx == n - 1 and j + dy == n - 1:
-                return step + 1
-            if 0 <= i + dx < n and 0 <= j + dy < n and grid[i + dx][j + dy] == 0:
-                queue.append((i + dx, j + dy, step + 1))
-                grid[i + dx][j + dy] = 1  # mark as visited
+        step += 1
+        for _ in range(len(queue)):
+            i, k = queue.pop()
+            for x, y in [(-1, -1), (1, 0), (0, 1), (-1, 0), (0, -1), (1, 1), (1, -1), (-1, 1)]:
+                dx, dy = i + x, k + y
+                if dx == gLen - 1 and dy == gLen - 1:
+                    return step
+                if 0 <= dx < gLen and 0 <= dy < gLen and grid[dx][dy] == 0 and not visited[dx][dy]:
+                    queue.appendleft((dx, dy))
+                    visited[dx][dy] = True
+                # print("dx = ", dx, "dy = ", dy, "grid = ", grid[dx][dy])
     return -1
 
-print(shortestPathBinaryMatrix([[0,1], [1, 0]]))
-print('qwertyu')
+
+print(shortestPathBinaryMatrix([[0, 0, 0], [1, 1, 0], [1, 1, 0]]))
