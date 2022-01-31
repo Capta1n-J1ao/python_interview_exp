@@ -28,8 +28,6 @@ class Solution:
             # print(i)
             # if height[i] > height[stack[-1]]:
             # print(len(stack))
-
-
             while len(stack) > 0 and height[i] > height[stack[-1]]:
             # while stack:
                 # print(height[i], height[stack[-1]])
